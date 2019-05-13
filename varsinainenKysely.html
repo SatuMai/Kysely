@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Kysymykset</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+<!--===============================================================================================-->
+</head>
+<body>
+    
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDpHpILN6W6cGbIroMiJSTyI8hv8J76-WQ",
+    authDomain: "sininenananas-9073a.firebaseapp.com",
+    databaseURL: "https://sininenananas-9073a.firebaseio.com",
+    projectId: "sininenananas-9073a",
+    storageBucket: "sininenananas-9073a.appspot.com",
+    messagingSenderId: "477094398366",
+    appId: "1:477094398366:web:b5c215502a022b16"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+    
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+	<div class="container-contact100">
+		<div class="wrap-contact100">
+			<form class="contact100-form validate-form">
+				<span class="contact100-form-title">
+				Kerro opiskelu- kokemuksistasi
+				</span>
+                
+    <script>
+        
+    // tässä haetaan kysymykset ja vastausvaihtoehdot
+        
+        var lomakekentta = [];
+        
+        $.getJSON("./kymysykset.json", function(data){
+            console.log("toimii!")
+        
+            var items = []; 
+        
+       //haetaan tiedot
+         
+        //Loopataan kysymykset läpi -> array        
+        $.each(data, function(key,d){
+            
+            //Tulostetaan kysymys
+            items.push( "<br>" + d.question + "<br>"  );
+            
+            
+           
+            if(d.answers) {
+                console.log('Objekti : ', d);
+                var idTyyppi = {};
+                idTyyppi.id = d.id;
+                idTyyppi.tyyppi = d.answers.type;
+                lomakekentta.push(idTyyppi);
+                if(d.answers.type === "radio") {
+                    $.each(d.answers.values, function(k,value) {
+                        items.push("<input type='radio' name="+d.id+" value="+value+">"+value+"<br>" )
+                    })
+                }
+                 if(d.answers.type === "checkbox") {
+                    $.each(d.answers.values, function(k,value) {
+                        items.push("<input type='checkbox' name="+d.id+" value="+value+">"+value+"<br>")
+                    })
+                }
+                
+                
+            } else {
+                  var idTyyppi = {};
+                idTyyppi.id = d.id;
+                idTyyppi.tyyppi = undefined;
+                lomakekentta.push(idTyyppi);
+                items.push("<textarea name="+d.id+"></textarea><br>")
+            }
+                       
+            
+        });
+           
+       $("#kysymys").append(items.join("")); 
+  
+    })      
+
+    </script>
+    
+    <script> 
+        // tässä lomakkeen tiedot luetaan ja muutetaan Json
+        
+     function laheta(){
+         
+         var vastaukset = [];
+        console.log('LENGTH', lomakekentta.length)
+         for (i = 0; i < lomakekentta.length; i++) {  
+            
+             var vastaus = {};
+             vastaus.id = lomakekentta[i].id;
+             vastaus.answers = [];
+           
+            
+            console.log('Tyyppi', lomakekentta[i].tyyppi);
+             if(lomakekentta[i].tyyppi !== undefined) {
+                    
+                 var radios = document.getElementsByName(lomakekentta[i].id);
+                    
+                    for (var x = 0, length = radios.length; x < length; x++){
+                    if (radios[x].checked){ 
+
+                        vastaus.answers.push(radios[x].value);
+                      
+                     }
+                    } 
+             }
+             else {
+                 var elementti = document.getElementsByName(lomakekentta[i].id);
+                 vastaus.answers.push(elementti[0].value);
+             }
+             
+             vastaukset.push(vastaus);
+         } 
+         var myJSON = JSON.stringify(vastaukset);
+        
+         window.location.href = "/kiitos.html";
+          console.log(myJSON);
+         alert(myJSON)
+        /*
+         $.ajax({
+        url: 'url_osoite_mihin_lähetetään',
+        type: 'POST',
+        dataType: 'application/json',
+        contentType: 'application/json',
+        data: myJSON, 
+        success: function() { alert('POST completed. Data:' + myJSON)},
+	   error: function(xhr, status, error){
+      		console.log(xhr.statusText);
+      		console.log(status);
+      		console.log(error);
+ 	 }
+
+            });*/
+
+     }
+                
+    </script>
+
+				
+
+				
+
+				
+
+				
+				<div class="wrap-input100 validate-input" >
+					<span class="label-input100" id="kysymys"></span>
+					
+					<span class="focus-input100"></span>
+				</div>
+
+				<div class="container-contact100-form-btn">
+					<div class="wrap-contact100-form-btn">
+						<div class="contact100-form-bgbtn"></div>
+						                            
+                            <button type="button" class="contact100-form-btn" onclick="laheta()">
+							<span>
+								Lähetä vastaus
+								<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+							</span>
+						</button>
+						
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+
+	<div id="dropDownSelect1"></div>
+
+<!--===============================================================================================-->
+	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/bootstrap/js/popper.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/select2/select2.min.js"></script>
+	<script>
+		$(".selection-2").select2({
+			minimumResultsForSearch: 20,
+			dropdownParent: $('#dropDownSelect1')
+		});
+	</script>
+<!--===============================================================================================-->
+	<script src="vendor/daterangepicker/moment.min.js"></script>
+	<script src="vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+	<script src="js/main.js"></script>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-23581568-13');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+[{
+		"id": 1,
+		"question": "Missä koulutusohjelmassa opiskelet?",
+		"answers": {
+			"type": "radio",
+			"values": ["Tietojenkäsittelyn päivätoteutus", "Tietojenkäsittelyn monimuoto", "Avoin AMK (tietojenkäsittely)"]
+		}
+	},
+	
+	
+	{
+		"id": 2,
+		"question": "Missä profiilissa opiskelet / aiot opiskella?",
+		"answers": {
+			"type": "checkbox",
+			"values": ["Ohjelmistotuotanto ", "Digitaaliset palvelut", "ICT ja liiketoiminta", "ICT-infrastruktuurit"]
+		}
+	},
+	
+	{
+		"id": 3,
+		"question": "Oletko onnistunut verkostoitumaan koulussa? Esimerkiksi onko sinulla kaveriporukka, jonka kanssa ratkotte opiskeluun liittyviä pulmia.",
+		"answers": {
+			"type": "radio",
+			"values": ["Kyllä", "Ei"]
+		}
+	},
+	
+	{
+		"id": 4,
+		"question": "Oletko verkostoitunut koulun ulkopuolella IT-alan ihmisten kanssa?",
+		"answers": {
+			"type": "radio",
+			"values": ["Kyllä", "Ei"]
+		}
+	},
+	
+	{
+		"id": 5,
+		"question": "Koetko, että sukupuoli vaikuttaa opiskeluun tietojenkäsittelyn koulutusohjelmassa?",
+		"answers": {
+			"type": "radio",
+			"values": ["Kyllä", "Ei"]
+		}
+	},
+	
+	{
+		"id": 6,
+		"question": "Työskenteletkö jo it-alalla?",
+		"answers": {
+			"type": "radio",
+			"values": ["Kyllä", "Ei"]
+		}
+	},
+	
+	{
+		"id": 7,
+		"question": "Millaisena koet asemasi naisena IT-alalla tulevaisuudessa?",
+		"answers": null
+	}
+]

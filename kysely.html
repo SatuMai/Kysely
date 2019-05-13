@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Kysely</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+<!--===============================================================================================-->
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+	<div class="container-contact100">
+		<div class="wrap-contact100">
+			<form class="contact100-form validate-form">
+				<span class="contact100-form-title">
+				Kerro opiskelu- kokemuksistasi
+				</span>
+                
+    
+<script>
+        //tästä alkaa lomakkeen lukeminen:
+                    
+        var tunnukset = [];
+        $.getJSON("https://softarest.herokuapp.com/questionss/", function(data){
+            console.log("toimii!")
+        
+            var items = []; 
+        
+       //haetaan tiedot
+         
+        //Loopataan kysymykset läpi -> array        
+        $.each(data, function(key,d){
+            console.log("d: "+d.option1)
+            //Tulostetaan kysymys
+            items.push("<br>" + d.question.question + "<br>"   );
+            
+            
+           
+            if(d.type) {
+                console.log('Objekti : ', d);
+                if(d.type === "Radio") {
+                    if(d.option1 != null){
+                        items.push("<input type='radio' value="+d.option1+">"+d.option1+"<br>")
+                    }
+                    if(d.option2 != null){
+                        items.push("<input type='radio' value="+d.option2+">"+d.option2+"<br>")
+                    }
+                    if(d.option3 != null){
+                        items.push("<input type='radio' value="+d.option3+">"+d.option3+"<br>")
+                    }
+                    if(d.option4 != null){
+                        items.push("<input type='radio' value="+d.option4+">"+d.option4+"<br>")
+                    }
+                    /*$.each(d.answers.values, function(k,value) {
+                        items.push("<input type='radio' value="+value+">"+value+"<br>")
+                    })*/
+                }
+                 if(d.type === "Checkbox") {
+                    if(d.option1 != null){
+                        items.push("<input type='checkbox' value="+d.option1+">"+d.option1+"<br>")
+                    }
+                    if(d.option2 != null){
+                        items.push("<input type='checkbox' value="+d.option2+">"+d.option2+"<br>")
+                    }
+                    if(d.option3 != null){
+                        items.push("<input type='checkbox' value="+d.option3+">"+d.option3+"<br>")
+                    }
+                    if(d.option4 != null){
+                        items.push("<input type='checkbox' value="+d.option4+">"+d.option4+"<br>")
+                    }
+                }
+                
+                
+            } else {
+                items.push("<textarea></textarea><br>")
+            }
+            //Tässä pitäisi katsoa onko kysymyksellä vastaus vaihtoehtoja ? 
+            //Jos ei niin silloin textarea 
+            
+            //Loopataan vastausvaihtoedot
+            
+            //Jos on vastaus vaihtoehtoja niin tarkistettava minkä tyyppinen vastaus esim. type="checkbox" tai type="radio" ja tulostettava oikea html elementti
+            
+            
+        });
+           
+       $("#kysymys").append(items.join("")); 
+  
+    })   
+                </script>
+                <script>
+    
+    // lomakkeen haku tietokannasta päättyy tähän.
+     
+    //lomakkeen tietojen lukeminen ja muuttaminen json-muotoon
+         
+    function laheta(){
+        for(i =0; i > tunnukset.length; i++){
+            type=document.getElementById(tunnukset[i]).type;
+            var radios =        document.getElementsByName(tunnukset[i]);
+            for (var x = 0, length = radios.length; x < length; x++){
+            if (radios[x].checked){ 
+               vastaus=radios[x].value;
+             }
+        }
+
+            
+           }
+        
+
+       }
+
+                    
+$(document).ready(function() {
+        var jsonData = {"tunnukset":"", "value":"??"};
+
+            /* stringify -> muunnetaan JS-olio JSON-olioksi */
+        var myJSON = JSON.stringify(jsonData);
+            })
+
+           $('#button').click(function() {
+               var answer = {
+                   answer: $('#text').val()
+               };
+
+               $.ajax({
+                   url: "https://softarest.herokuapp.com/savejson",
+                   type: "POST",
+                   data: JSON.stringify(answer),
+                   dataType: "json",
+                   contentType: "application/json",
+                   mimeType: "application/json",
+                  success: function() { alert('POST completed. Data:' + myJSON)},
+	               error: function(xhr, status, error){
+      		        console.log(xhr.statusText);
+      		        console.log(status);
+      		        console.log(error);
+
+                   }
+
+               });        
+           })
+  
+    </script> 
+    
+
+				
+				<div class="wrap-input100 validate-input" >
+					<span class="label-input100" id="kysymys"></span>
+					
+					<span class="focus-input100"></span>
+				</div>
+
+				<div class="container-contact100-form-btn">
+					<div class="wrap-contact100-form-btn">
+						<div class="contact100-form-bgbtn"></div>
+						<button id="button" class="contact100-form-btn" >
+							<span>
+								Lähetä vastaus
+								<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+							</span>
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+
+	<div id="dropDownSelect1"></div>
+
+<!--===============================================================================================-->
+	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/bootstrap/js/popper.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/select2/select2.min.js"></script>
+	<script>
+		$(".selection-2").select2({
+			minimumResultsForSearch: 20,
+			dropdownParent: $('#dropDownSelect1')
+		});
+	</script>
+<!--===============================================================================================-->
+	<script src="vendor/daterangepicker/moment.min.js"></script>
+	<script src="vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+	<script src="js/main.js"></script>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-23581568-13');
+</script>
+
+</body>
+</html>
